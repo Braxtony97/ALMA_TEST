@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/ALMA/Scenes/Load.unity
+    guid: f8a332b4cc582ed48873b31a196692a1
+  - enabled: 1
+    path: Assets/ALMA/Scenes/MainMenu.unity
+    guid: 97dcdb174e7049b4eb690140a5daf4ae
+  - enabled: 1
+    path: Assets/ALMA/Scenes/Gameplay.unity
+    guid: 2ed08f39fbe67234caa9f221bcead883
   m_configObjects: {}
