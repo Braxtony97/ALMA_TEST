@@ -4,6 +4,7 @@ using Zenject;
 public class GameLoader : MonoBehaviour
 {
     [Inject] private SceneLoader _sceneLoader;
+    [Inject] private UIController _UIcontroller;
 
     private void Awake()
     {
@@ -13,6 +14,6 @@ public class GameLoader : MonoBehaviour
 
     private void LoadGame()
     {
-        _sceneLoader.LoadSceneByType(Enums.SceneType.MainMenu); 
+        _sceneLoader.LoadSceneByType(Enums.SceneType.MainMenu);
     }
 }
