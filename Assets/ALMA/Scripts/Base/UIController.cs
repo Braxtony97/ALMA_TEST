@@ -5,6 +5,7 @@ using static Enums;
 
 public class UIController : MonoBehaviour
 {
+    public PopupController PopupController;
     public ScreenUI CurrentScreen => _currentScreen;
 
     [SerializeField] private ScreenUI[] _screensUI;
