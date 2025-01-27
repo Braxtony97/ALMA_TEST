@@ -32,4 +32,9 @@ public class UIController : MonoBehaviour
             }
         }
     }
+
+    public void OpenScreenwwww()
+    {
+        Debug.Log("s");
+    }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 public class PinClickHandler : ClickHandler
 {
@@ -8,6 +9,8 @@ public class PinClickHandler : ClickHandler
     public void Start()
     {
         EventsProvider.OnPointerDownUpEvent += ChangeIsDraggingState;
+
+        Debug.Log(_UIController);
     }
 
     public override void OnPointerClick(PointerEventData eventData)

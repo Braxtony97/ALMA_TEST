@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 public class ClickHandler : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] protected GameObject _mainWindow;
+    [Inject] protected UIController _UIController;
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
