@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
@@ -6,11 +7,11 @@ public class PinClickHandler : ClickHandler
 {
     protected bool _isDragging = false;
 
-    public void Start()
+    private GameObject _previewPopup;
+
+    public void Start() 
     {
         EventsProvider.OnPointerDownUpEvent += ChangeIsDraggingState;
-
-        Debug.Log(_UIController);
     }
 
     public override void OnPointerClick(PointerEventData eventData)
@@ -24,7 +25,19 @@ public class PinClickHandler : ClickHandler
 
         if (!_isDragging)
         {
-            SetWindowPosition();
+            string pinId = gameObject.GetComponent<InfoPin>().Id;
+
+            Debug.Log(pinId);
+
+            PopupData popupData = _dataSaver.LoadDataById(pinId, "popupData");
+
+            Debug.Log(popupData.Title);
+
+            if (popupData != null)
+            {
+                _previewPopup = _UIController.PopupController.PreviewPopupShow(popupData);
+                SetWindowPosition(_previewPopup);
+            }
         }   
     }
 
@@ -34,18 +47,22 @@ public class PinClickHandler : ClickHandler
 
         if (!_isDragging)
         {
-            _mainWindow.SetActive(false);
+            if (_previewPopup != null && !IsPointerOverPreviewPopup())
+            {
+                _previewPopup.SetActive(false);
+                _previewPopup = null;
+            }
         }
     }
 
-    private void SetWindowPosition()
+    private void SetWindowPosition(GameObject prefab)
     {
-        if (_mainWindow == null)
+        if (prefab == null)
         {
             return;
         }
 
-        RectTransform windowRect = _mainWindow.GetComponent<RectTransform>();
+        RectTransform windowRect = prefab.GetComponent<RectTransform>();
         RectTransform parentRect = GetComponent<RectTransform>();
 
         if (windowRect == null || parentRect == null)
@@ -58,7 +75,7 @@ public class PinClickHandler : ClickHandler
         float offsetX = CalculateOffset(parentRect, windowRect);
         windowRect.anchoredPosition = new Vector2(offsetX, windowRect.anchoredPosition.y);
 
-        _mainWindow.SetActive(true);
+        prefab.SetActive(true);
     }
 
     private float CalculateOffset(RectTransform parentRect, RectTransform windowRect)
@@ -80,12 +97,36 @@ public class PinClickHandler : ClickHandler
     {
         _isDragging = isDragging;
 
-        _mainWindow.SetActive(!_isDragging);
+        _previewPopup.SetActive(!_isDragging);
 
         if (!_isDragging)
         {
-            SetWindowPosition(); 
+            SetWindowPosition(_previewPopup); 
         }
+    }
+
+    private bool IsPointerOverPreviewPopup()
+    {
+        if (_previewPopup == null)
+        {
+            return false;
+        }
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject == _previewPopup)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void OnDestroy()

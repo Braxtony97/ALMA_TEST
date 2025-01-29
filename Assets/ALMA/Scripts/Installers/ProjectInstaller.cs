@@ -11,7 +11,6 @@ public class ProjectInstaller : MonoInstaller
         Container.Bind<AllScenesData>().FromInstance(_allScenesData).AsSingle().NonLazy();
         Container.Bind<UIController>().FromInstance(_uiController).AsSingle().NonLazy();
         Container.Bind<SceneLoader>().AsSingle().NonLazy();
-
-        Container.BindInterfacesAndSelfTo<ClickHandler>().FromComponentsInHierarchy().AsTransient();
+        Container.Bind<DataSaver>().AsSingle().NonLazy();   
     }
 }
