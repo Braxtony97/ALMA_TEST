@@ -27,11 +27,7 @@ public class PinClickHandler : ClickHandler
         {
             string pinId = gameObject.GetComponent<InfoPin>().Id;
 
-            Debug.Log(pinId);
-
             PopupData popupData = _dataSaver.LoadDataById(pinId, "popupData");
-
-            Debug.Log(popupData.Title);
 
             if (popupData != null)
             {

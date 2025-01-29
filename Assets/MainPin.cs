@@ -16,6 +16,8 @@ public class MainPin : MonoBehaviour
     [SerializeField] private Button _closeButton;
     [SerializeField] private Button _editButton;
 
+    private PopupData _popupData;
+
     private void Start()
     {
         _closeButton.onClick.AddListener(Hide);
@@ -26,11 +28,12 @@ public class MainPin : MonoBehaviour
     {
         _title.text = popupData.Title;
         _description.text = popupData.Description;
+        _popupData = popupData;
     }
 
     private void EditPopup()
     {
-        _uiController.PopupController.InputPopupShow(true);
+        _uiController.PopupController.InputPopupShow(true, _popupData);
         this.gameObject.SetActive(false);
     }
 

@@ -39,6 +39,7 @@ public class PopupController : MonoBehaviour
             RectTransform pinRectTransform = newPin.GetComponent<RectTransform>();
             pinRectTransform.anchoredPosition = data.Position;
             newPin.GetComponent<InfoPin>().Id = data.Id;
+            
             pinRectTransform.SetSiblingIndex(0);
         }
     }
@@ -73,7 +74,7 @@ public class PopupController : MonoBehaviour
         return _currentQuestionPopup;
     }
      
-    public GameObject InputPopupShow(bool isFromEditPopup)
+    public GameObject InputPopupShow(bool isFromEditPopup, PopupData data = null)
     {
         if (_currentInputPopup == null)
         {
@@ -83,10 +84,15 @@ public class PopupController : MonoBehaviour
         _inputPopupRectTransform = _currentInputPopup.GetComponent<RectTransform>();
         _popupInputController = _currentInputPopup.GetComponent<PopupInputController>();
 
-        if (!isFromEditPopup)
+        if (isFromEditPopup)
+        {
+            _popupInputController.ChangeID(data.Id.ToString());
+        }
+        else
         {
             _popupInputController.ChangeID();
-        }
+        }        
+        
         _inputPopupRectTransform.anchoredPosition = Vector2.zero;
         _inputPopupRectTransform.transform.SetAsLastSibling();
         _currentInputPopup.SetActive(true);
