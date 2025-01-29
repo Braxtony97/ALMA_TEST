@@ -15,7 +15,7 @@ public class PopupInputController : MonoBehaviour
     [SerializeField] private Button _closeButton;
     [SerializeField] private Button _saveButton;
 
-    private string _popupId;
+    public string IdPopup;
 
     private void Start()
     {
@@ -27,40 +27,42 @@ public class PopupInputController : MonoBehaviour
     {
         if (string.IsNullOrEmpty(popupId))
         {
-            _popupId = Guid.NewGuid().ToString();
+            IdPopup = Guid.NewGuid().ToString();
         }
         else
         {
-            _popupId = popupId;
-            LoadData(_popupId);
+            IdPopup = popupId;
+            LoadData(IdPopup);
         }
-
-        gameObject.SetActive(true);
     }
 
     private void SaveData()
     {
+        Debug.Log(IdPopup);
+
         PopupData data = new PopupData
         {
-            Id = _popupId,
+            Id = IdPopup,
             Title = _title.text,
             Description = _description.text,
             Position = _uiController.PopupController.MouseClickPosition
         };
 
-        PopupData existingData = _dataSaver.LoadDataById(_popupId, "popupData");
+        Debug.Log(data.Id);
+        PopupData existingData = _dataSaver.LoadDataById(data.Id, "popupData");
+
         if (existingData != null)
         {
-            _dataSaver.UpdateDataById(data, "popupData");
+            _dataSaver.UpdateDataById(data, "popupData"); 
         }
         else
         {
             _dataSaver.SaveToJson(data, "popupData");
+            _uiController.PopupController.CreateNewInfoPin(data);
         }
 
         EventsProvider.OnSavePopupData?.Invoke();
 
-        _uiController.PopupController.CreateNewInfoPin(data);
         Hide();
     }
 
@@ -73,6 +75,12 @@ public class PopupInputController : MonoBehaviour
             _title.text = data.Title;
             _description.text = data.Description;
         }
+    }
+
+    private void OnDestroy()
+    {
+        _closeButton.onClick.RemoveListener(Hide);
+        _saveButton.onClick.RemoveListener(SaveData);
     }
 
     public void Hide()

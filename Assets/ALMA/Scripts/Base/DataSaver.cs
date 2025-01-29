@@ -71,6 +71,7 @@ public class DataSaver
             PopupDataWrapper popupDataListWrapper = JsonUtility.FromJson<PopupDataWrapper>(json);
 
             int index = popupDataListWrapper.PopupDataList.FindIndex(item => item.Id == data.Id);
+            Debug.Log(index);
             if (index != -1)
             {
                 popupDataListWrapper.PopupDataList[index] = data;
